@@ -26,14 +26,18 @@ def removeNoise():
 	x = 1
 	with open('test.csv', 'r') as csvfile:
 		reader = csv.reader(csvfile, delimiter = ';', quotechar = '"')
-		for row in reader:
-			
+		for line in reader:
+			tweet = line[4].split()
+			words = [w for w in tweet if w not in stopwords.words('english')]
+			tweet_clean = ' '.join(words)
+			tweet_clean = re.sub(r'\d+', '', tweet_clean)
+			tweet_clean = re.sub(r'[!\?\.,;"]', '', tweet_clean)
+			print tweet_clean
 			#remove stop words from each row 
-			filtWord = [word for word in row if word ] #not in stopwords.words('english')]
+			#filtWord = [word for word in row if word ] #not in stopwords.words('english')]
 			#print x,filtWord
-			x = x + 1 
+			#x = x + 1 
 			#print '\n'
-		print filtWord
 
 
 
