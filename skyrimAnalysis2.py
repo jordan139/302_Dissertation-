@@ -4,40 +4,69 @@ from nltk.tokenize import RegexpTokenizer
 from nltk.corpus import stopwords  	
 from nltk import word_tokenize
 
-'''
-reg ex library form nltk
 
-from __future__ import devision 
-from nltk, re, pprint 
-from nltk import word_tokenoze
-
-			for y in filtWord:
-				output = re.sub(r'\d+', '', word)
-				print x,output
-				x = x + 1 
-				print '\n'
+from nltk.corpus import opinion_lexicon
+from nltk.tokenize import treebank
 
 
-'''
+
 
 
 
 def removeNoise():
-	x = 1
+	x = 0
 	with open('test.csv', 'r') as csvfile:
 		reader = csv.reader(csvfile, delimiter = ';', quotechar = '"')
 		for line in reader:
-			tweet = line[4].split()
+			x = x + 1 
+			tweet = line[4].split() #cut the tweets out of the csv file
+	
+			#remove noise : stop words, punctuation and links usinf reg ex 
 			words = [w for w in tweet if w not in stopwords.words('english')]
 			tweet_clean = ' '.join(words)
 			tweet_clean = re.sub(r'\d+', '', tweet_clean)
 			tweet_clean = re.sub(r'[!\?\.,;"]', '', tweet_clean)
-			print tweet_clean
-			#remove stop words from each row 
-			#filtWord = [word for word in row if word ] #not in stopwords.words('english')]
-			#print x,filtWord
-			#x = x + 1 
-			#print '\n'
+
+			#print out the clean version of the tweet
+			word_tokenize.tokenize()
+			print x, ':',tweet_clean
+
+def demo_liu_hu_lexicon(sentence, plot = False):
+
+	#tokenizer funtion
+	tokenizer = treebank.TreebankWordTokenizer()
+
+	posList = []
+	negList = []
+	nueList = []
+
+	posWords = 0
+	negWords = 0
+	nueWords = 0 
+	
+	
+	tokenized =  [word.lower() for word in tokenizer.tokenize(sentence)]
+
+	for word in tokenized:
+		if word in opinion_lexicon.positive():
+			posWords  = posWords + 1
+			posList.append(word)
+		elif word in opinion_lexicon.negative():
+			negWords = negWords + 1 
+			negList.append(word)
+		else:
+			nueWords = nueWords + 1 
+			nueList.append(word)
+
+	print 'Positive Word No:',posWords, '\n', 'Positive Word List:',posList,'\n'
+	print 'Negative Word No:',negWords, '\n','Negative Word List:',negList, '\n'
+	print 'Nuetral Word No:', nueWords, '\n','Nuetral Word List:', nueList, '\n'
+
+	
+
+demo_liu_hu_lexicon("hate love enjoy hat cant wait love you need you must have need want must lust love")
+
+
 
 
 
@@ -45,13 +74,6 @@ def removeNoise():
 
 
 
-removeNoise()
 
 
 
-#remove links 
-#output = re.sub(r'\d+', '', word)
-
-
-#tokenizer = RegexpTokenizer(r'\w+')
-#remove punct
