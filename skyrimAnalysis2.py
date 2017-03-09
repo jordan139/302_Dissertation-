@@ -28,10 +28,9 @@ def removeNoise():
 			tweet_clean = re.sub(r'[!\?\.,;"]', '', tweet_clean)
 
 			#print out the clean version of the tweet
-			word_tokenize.tokenize()
 			print x, ':',tweet_clean
 
-def demo_liu_hu_lexicon(sentence, plot = False):
+def demo_liu_hu_lexicon(file, plot = True):
 
 	#tokenizer funtion
 	tokenizer = treebank.TreebankWordTokenizer()
@@ -40,32 +39,58 @@ def demo_liu_hu_lexicon(sentence, plot = False):
 	negList = []
 	nueList = []
 
+
+
 	posWords = 0
 	negWords = 0
 	nueWords = 0 
 	
 	
-	tokenized =  [word.lower() for word in tokenizer.tokenize(sentence)]
+	tokenized =  [word.lower() for word in tokenizer.tokenize(file)]
+
+	#plot to graph 
+	x = list(range (len (tokenized)))
+	y = []
 
 	for word in tokenized:
 		if word in opinion_lexicon.positive():
 			posWords  = posWords + 1
 			posList.append(word)
+			#plot 
+			y.append(1)
 		elif word in opinion_lexicon.negative():
 			negWords = negWords + 1 
 			negList.append(word)
+			#plot 
+			y.append(-1)
 		else:
 			nueWords = nueWords + 1 
 			nueList.append(word)
+			#plot 
+			y.append(0)
 
 	print 'Positive Word No:',posWords, '\n', 'Positive Word List:',posList,'\n'
 	print 'Negative Word No:',negWords, '\n','Negative Word List:',negList, '\n'
 	print 'Nuetral Word No:', nueWords, '\n','Nuetral Word List:', nueList, '\n'
 
-	
+	if posWords > negWords:
+		print 'Overall Sentiment is : Positive'
+	elif posWords < negWords:
+		print 'Overall Sentiment is : Negative'
 
-demo_liu_hu_lexicon("hate love enjoy hat cant wait love you need you must have need want must lust love")
 
+	#debug this
+	elif nueWords > posWords and nueWords > negWords:
+		print 'Overall Sentiment is : Neutral'
+	#if plot == True:
+	#	_show_plot(x,y, x_labels= tokenized, y_labels = ['Negative', 'Nuetral', 'Positive'])
+	print posWords
+	print negWords
+	print nueWords
+
+#demo_liu_hu_lexicon("hate love enjoy hat cant wait love you need you must have need want must lust love")
+
+removeNoise()
 
 
 
