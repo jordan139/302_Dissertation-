@@ -5,10 +5,18 @@ from nltk.corpus import stopwords
 from nltk import word_tokenize
 from nltk.corpus import opinion_lexicon
 from nltk.tokenize import treebank
+from nltk import tokenize
+
+#sentiment anlaysis librarys 
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+
+
+testArray = ["VADER is smart, handsome, and funny i hate driving."]
 
 def removeNoise():
 	x = 0
-	with open('../skyrim.csv', 'r') as csvfile:
+	with open('test.csv', 'r') as csvfile:
 		reader = csv.reader(csvfile, delimiter = ';', quotechar = '"')
 		for line in reader:
 			x = x + 1 
@@ -71,13 +79,26 @@ def demo_liu_hu_lexicon(file, plot = False):
 		print 'Overall Sentiment is : Positive'
 
 
+
+
+def sentAnalyser(a):
+	 
+	analyzer = SentimentIntensityAnalyzer()
+	for sentence in testArray:
+
+		ss = analyzer.polarity_scores(sentence)
+		print ss 
+
+
 	#if plot == True:
 	#	_show_plot(x,y, x_labels= tokenized, y_labels = ['Negative', 'Nuetral', 'Positive'])
 
 
 #test instance 1 Pos:16 Neg:23 Nue:15 --> ouput = overall sentiment is: Negitive 
-demo_liu_hu_lexicon("my name love love love love love hate hate hate hate hate hate hate hate hate hate hate hate hate hate hate hate hate hate love love love love love love love love love love is jordan, hit, kill rape murder flowers bang love need hate bang n and i hate programming")
+#demo_liu_hu_lexicon("my name love love love love love hate hate hate hate hate hate hate hate hate hate hate hate hate hate hate hate hate hate love love love love love love love love love love is jordan, hit, kill rape murder flowers bang love need hate bang n and i hate programming")
 
+
+sentAnalyser(testArray)
 
 
 	
