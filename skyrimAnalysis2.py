@@ -3,19 +3,12 @@ import re
 from nltk.tokenize import RegexpTokenizer
 from nltk.corpus import stopwords  	
 from nltk import word_tokenize
-
-
 from nltk.corpus import opinion_lexicon
 from nltk.tokenize import treebank
 
-
-
-
-
-
 def removeNoise():
 	x = 0
-	with open('test.csv', 'r') as csvfile:
+	with open('../skyrim.csv', 'r') as csvfile:
 		reader = csv.reader(csvfile, delimiter = ';', quotechar = '"')
 		for line in reader:
 			x = x + 1 
@@ -30,7 +23,7 @@ def removeNoise():
 			#print out the clean version of the tweet
 			print x, ':',tweet_clean
 
-def demo_liu_hu_lexicon(file, plot = True):
+def demo_liu_hu_lexicon(file, plot = False):
 
 	#tokenizer funtion
 	tokenizer = treebank.TreebankWordTokenizer()
@@ -39,12 +32,9 @@ def demo_liu_hu_lexicon(file, plot = True):
 	negList = []
 	nueList = []
 
-
-
 	posWords = 0
 	negWords = 0
 	nueWords = 0 
-	
 	
 	tokenized =  [word.lower() for word in tokenizer.tokenize(file)]
 
@@ -73,25 +63,20 @@ def demo_liu_hu_lexicon(file, plot = True):
 	print 'Negative Word No:',negWords, '\n','Negative Word List:',negList, '\n'
 	print 'Nuetral Word No:', nueWords, '\n','Nuetral Word List:', nueList, '\n'
 
-	if posWords > negWords:
-		print 'Overall Sentiment is : Positive'
+	if nueWords > posWords and nueWords > negWords:
+		print 'Overall Sentiment is : Nuetral'
 	elif posWords < negWords:
 		print 'Overall Sentiment is : Negative'
+	elif posWords > negWords:
+		print 'Overall Sentiment is : Positive'
 
 
-	#debug this
-	elif nueWords > posWords and nueWords > negWords:
-		print 'Overall Sentiment is : Neutral'
 	#if plot == True:
 	#	_show_plot(x,y, x_labels= tokenized, y_labels = ['Negative', 'Nuetral', 'Positive'])
-	print posWords
-	print negWords
-	print nueWords
 
-#demo_liu_hu_lexicon("hate love enjoy hat cant wait love you need you must have need want must lust love")
 
-removeNoise()
-
+#test instance 1 Pos:16 Neg:23 Nue:15 --> ouput = overall sentiment is: Negitive 
+demo_liu_hu_lexicon("my name love love love love love hate hate hate hate hate hate hate hate hate hate hate hate hate hate hate hate hate hate love love love love love love love love love love is jordan, hit, kill rape murder flowers bang love need hate bang n and i hate programming")
 
 
 
