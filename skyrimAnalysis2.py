@@ -12,11 +12,11 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 
-testArray = ["VADER is smart, handsome, and funny i hate driving."]
-
+            
+#remove all noise from passed files in term sof punct, stop words and links
 def removeNoise():
 	x = 0
-	with open('test.csv', 'r') as csvfile:
+	with open('../skyrim.csv', 'r') as csvfile:
 		reader = csv.reader(csvfile, delimiter = ';', quotechar = '"')
 		for line in reader:
 			x = x + 1 
@@ -26,12 +26,22 @@ def removeNoise():
 			words = [w for w in tweet if w not in stopwords.words('english')]
 			tweet_clean = ' '.join(words)
 			tweet_clean = re.sub(r'\d+', '', tweet_clean)
-			tweet_clean = re.sub(r'[!\?\.,;"]', '', tweet_clean)
+
+			#punctuation remover 
+			#tweet_clean = re.sub(r'[!\?\.,;"]', '', tweet_clean)
+			
+
+			print x, ':',tweet_clean
+			sentAnalyser(tweet_clean)
+			demo_liu_hu_lexicon(tweet_clean, plot = False)
+			print '\n'
 
 			#print out the clean version of the tweet
-			print x, ':',tweet_clean
+			
 
-def demo_liu_hu_lexicon(file, plot = False):
+
+#sort into pos/neg/nuetral sets 
+def demo_liu_hu_lexicon(text, plot = False):
 
 	#tokenizer funtion
 	tokenizer = treebank.TreebankWordTokenizer()
@@ -44,32 +54,32 @@ def demo_liu_hu_lexicon(file, plot = False):
 	negWords = 0
 	nueWords = 0 
 	
-	tokenized =  [word.lower() for word in tokenizer.tokenize(file)]
+	tokenized =  [word.lower() for word in tokenizer.tokenize(text)]
 
-	#plot to graph 
-	x = list(range (len (tokenized)))
-	y = []
 
 	for word in tokenized:
 		if word in opinion_lexicon.positive():
 			posWords  = posWords + 1
 			posList.append(word)
+			
 			#plot 
-			y.append(1)
+			#y.append(1)
 		elif word in opinion_lexicon.negative():
 			negWords = negWords + 1 
 			negList.append(word)
+			
 			#plot 
-			y.append(-1)
+			#y.append(-1)
 		else:
 			nueWords = nueWords + 1 
 			nueList.append(word)
+			
 			#plot 
-			y.append(0)
+			#y.append(0)
 
-	print 'Positive Word No:',posWords, '\n', 'Positive Word List:',posList,'\n'
-	print 'Negative Word No:',negWords, '\n','Negative Word List:',negList, '\n'
-	print 'Nuetral Word No:', nueWords, '\n','Nuetral Word List:', nueList, '\n'
+	print 'Positive Word No:',posWords #, '\n', 'Positive Word List:',posList,'\n'
+	print 'Negative Word No:',negWords #, '\n','Negative Word List:',negList, '\n'
+	print 'Nuetral Word No:', nueWords #, '\n','Nuetral Word List:', nueList, '\n'
 
 	if nueWords > posWords and nueWords > negWords:
 		print 'Overall Sentiment is : Nuetral'
@@ -79,32 +89,17 @@ def demo_liu_hu_lexicon(file, plot = False):
 		print 'Overall Sentiment is : Positive'
 
 
+#analysis funtion for any passed tweet
+def sentAnalyser(passedTweet):
 
-
-def sentAnalyser(a):
-	 
+	#analysis on tweet it has been passed
 	analyzer = SentimentIntensityAnalyzer()
-	for sentence in testArray:
-
-		ss = analyzer.polarity_scores(sentence)
-		print ss 
-
-
-	#if plot == True:
-	#	_show_plot(x,y, x_labels= tokenized, y_labels = ['Negative', 'Nuetral', 'Positive'])
-
-
-#test instance 1 Pos:16 Neg:23 Nue:15 --> ouput = overall sentiment is: Negitive 
-#demo_liu_hu_lexicon("my name love love love love love hate hate hate hate hate hate hate hate hate hate hate hate hate hate hate hate hate hate love love love love love love love love love love is jordan, hit, kill rape murder flowers bang love need hate bang n and i hate programming")
-
-
-sentAnalyser(testArray)
-
-
-	
+	ss = analyzer.polarity_scores(passedTweet)
+	print ss 
 
 
 
+removeNoise()
 
 
 
