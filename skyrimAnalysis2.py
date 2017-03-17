@@ -31,12 +31,13 @@ def removeNoise():
 			#tweet_clean = re.sub(r'[!\?\.,;"]', '', tweet_clean)
 			
 
+			#print out the clean version of the tweet
 			print x, ':',tweet_clean
 			sentAnalyser(tweet_clean)
 			demo_liu_hu_lexicon(tweet_clean, plot = False)
 			print '\n'
 
-			#print out the clean version of the tweet
+			
 			
 
 
@@ -77,9 +78,9 @@ def demo_liu_hu_lexicon(text, plot = False):
 			#plot 
 			#y.append(0)
 
-	print 'Positive Word No:',posWords #, '\n', 'Positive Word List:',posList,'\n'
-	print 'Negative Word No:',negWords #, '\n','Negative Word List:',negList, '\n'
-	print 'Nuetral Word No:', nueWords #, '\n','Nuetral Word List:', nueList, '\n'
+	#print 'Positive Word No:',posWords #, '\n', 'Positive Word List:',posList,'\n'
+	#print 'Negative Word No:',negWords #, '\n','Negative Word List:',negList, '\n'
+	#print 'Nuetral Word No:', nueWords #, '\n','Nuetral Word List:', nueList, '\n'
 
 	if nueWords > posWords and nueWords > negWords:
 		print 'Overall Sentiment is : Nuetral'
@@ -95,7 +96,7 @@ def sentAnalyser(passedTweet):
 	#analysis on tweet it has been passed
 	analyzer = SentimentIntensityAnalyzer()
 	ss = analyzer.polarity_scores(passedTweet)
-	print ss 
+	print ss
 
 
 
