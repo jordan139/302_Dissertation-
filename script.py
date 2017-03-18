@@ -11,12 +11,13 @@ from nltk import tokenize
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
-
-            
+negComp = []
+posComp = []
+nueComp = []        
 #remove all noise from passed files in term sof punct, stop words and links
 def removeNoise():
 	x = 0
-	with open('../skyrim.csv', 'r') as csvfile:
+	with open('test.csv', 'r') as csvfile:
 		reader = csv.reader(csvfile, delimiter = ';', quotechar = '"')
 		for line in reader:
 			x = x + 1 
@@ -32,10 +33,11 @@ def removeNoise():
 			
 
 			#print out the clean version of the tweet
-			print x, ':',tweet_clean
+			#print x, ':',tweet_clean
 			sentAnalyser(tweet_clean)
-			demo_liu_hu_lexicon(tweet_clean, plot = False)
-			print '\n'
+			#demo_liu_hu_lexicon(tweet_clean, plot = False)
+			#print '\n'
+
 
 			
 			
@@ -93,14 +95,40 @@ def demo_liu_hu_lexicon(text, plot = False):
 #analysis funtion for any passed tweet
 def sentAnalyser(passedTweet):
 
+
+
 	#analysis on tweet it has been passed
 	analyzer = SentimentIntensityAnalyzer()
 	ss = analyzer.polarity_scores(passedTweet)
-	print ss
+	
+
+		
+	if ss["compound"] > 0.5:
+		posComp.append(ss["compound"])
+		
+	elif ss["compound"] < -0.5:
+		negComp.append(ss["compound"])
+		
+	elif ss["compound"] < 0.5 and ss["compound"] > - 0.5:
+		nueComp.append(ss["compound"])
 
 
+	
+	
 
 removeNoise()
 
+
+print "Positive"
+print len(posComp)
+print sum(posComp) / float(len(posComp))
+print '\n'
+print 'Negitive'
+print len(negComp)
+print sum(negComp) / float(len(negComp))
+print '\n'
+print 'Nuetral'
+print len(nueComp)
+print sum(nueComp) / float(len(nueComp))
 
 
