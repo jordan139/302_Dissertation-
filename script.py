@@ -6,6 +6,7 @@ from nltk import word_tokenize
 from nltk.corpus import opinion_lexicon
 from nltk.tokenize import treebank
 from nltk import tokenize
+from langdetect import detect
 
 #sentiment anlaysis librarys 
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
@@ -34,14 +35,16 @@ def removeNoise():
 
 			#print out the clean version of the tweet
 			#print x, ':',tweet_clean
-			sentAnalyser(tweet_clean)
+			tweet_clean = re.sub(r'\#\S+','', tweet_clean)
+
+
+			if len(tweet_clean.split()) > 7:
+				if sentAnalyser(tweet_clean)['compound'] == 0:
+					#print tweet_clean
+					pass
+					
 			#demo_liu_hu_lexicon(tweet_clean, plot = False)
 			#print '\n'
-
-
-			
-			
-
 
 #sort into pos/neg/nuetral sets 
 def demo_liu_hu_lexicon(text, plot = False):
@@ -95,26 +98,26 @@ def demo_liu_hu_lexicon(text, plot = False):
 #analysis funtion for any passed tweet
 def sentAnalyser(passedTweet):
 
-
-
 	#analysis on tweet it has been passed
 	analyzer = SentimentIntensityAnalyzer()
 	ss = analyzer.polarity_scores(passedTweet)
 	
 
 		
-	if ss["compound"] > 0.5:
+	if ss["compound"] >= 0.3:
 		posComp.append(ss["compound"])
 		
-	elif ss["compound"] < -0.5:
+		
+		
+	elif ss["compound"] <= -0.3:
 		negComp.append(ss["compound"])
 		
-	elif ss["compound"] < 0.5 and ss["compound"] > - 0.5:
+		
+	elif ss["compound"] < 0.2 and ss["compound"] > - 0.2:
 		nueComp.append(ss["compound"])
+		#print ss["compound"]
 
-
-	
-	
+	return ss
 
 removeNoise()
 
@@ -132,3 +135,13 @@ print len(nueComp)
 print sum(nueComp) / float(len(nueComp))
 
 
+# count = negComp + nueComp + posComp
+# count = map(lambda x:round(x,1), count)
+
+# # histogram
+# freq = [0]*21
+# for v in count:
+# 	freq[int((v+1)*10)] += 1
+
+# for i,v in enumerate(freq):
+# 	print '#'*v+'  '+str(i/10.0-1)
