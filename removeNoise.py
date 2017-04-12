@@ -8,44 +8,56 @@ from nltk.tokenize import treebank
 from nltk import tokenize
 from langdetect import detect
 
+#unicode
+import sys
 
 #sentiment anlaysis librarys 
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 
+#read file as unicode not str
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 def removeNoise():
 	x = 0
-	with open('test.csv', 'r') as csvfile:
-		reader = csv.reader(csvfile, delimiter = ';', quotechar = '"')
-		for line in reader:
-			tweet = line[4].split() #cut the tweets out of the csv file
-	
-			#remove noise : stop words
-			words = [w for w in tweet if w not in stopwords.words('english')]
-			tweet_clean = ' '.join(words)
+	y = 0
+	with open('newTestFile.csv', 'wb') as csvfile:			
+		file = csv.writer(csvfile, delimiter = ';', quotechar = '"')
+		with open('data/noMansSky.csv', 'r') as csvfile:
+			reader = csv.reader(csvfile, delimiter = ';', quotechar = '"')
+			for line in reader:
 
-			#remove links 
-			tweet_clean = re.sub(r'\d+', '', tweet_clean)
+				try:
+
+					#cut the tweets out of the csv file
+					tweet = line[4].split() 
+			
+					#remove noise : stop words
+					words = [w for w in tweet if w not in stopwords.words('english')]
+					tweet_clean = ' '.join(words)
+
+					#remove links 
+					tweet_clean = re.sub(r'^https?:\/\/.*[\r\n]*', '', tweet_clean, flags=re.MULTILINE)
+
+					#remove single tweets that contain hashtags 
+					tweet_clean = re.sub(r'\#\S+','', tweet_clean)
+
+					#final clean version of the tweet all noise removed 
+					finalString = unicode(tweet_clean, errors = 'ignore')
+
+					#rdont consider tweets with a size less than 2 words 
 
 
-			#remove single tweets that contain hashtags 
-			tweet_clean = re.sub(r'\#\S+','', tweet_clean)
+					if len(finalString.split()) > 2:
+							if detect(finalString) == 'en':
+								
 
-
-			#remove Tweets greater than the size of 2
-			if len(tweet_clean.split()) > 2:						
-					if sentAnalyser(tweet_clean)['compound'] == 0:
-						#with open('test.csv', 'w') as csvfile:
-		
-						print (tweet_clean)
-
-
-					#detect langauge 
-					#if detect(tweet_clean) == 'en':
-					#	print tweet_clean
-
+								#write each cleaned tweet to a new file 
+								file.writerow([finalString])
+				except:
+					print tweet_clean;
 
 
 def sentAnalyser(passedTweet):
