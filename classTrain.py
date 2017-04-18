@@ -6,6 +6,7 @@ from nltk.corpus import opinion_lexicon
 from nltk.tokenize import treebank
 from nltk import tokenize
 from langdetect import detect
+import re
 
 
 #sentiment anlaysis librarys 
@@ -17,38 +18,45 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 
-def getTrainData():
+def getTrainData(dataTotal):
 	negCount = 0
 	posCount = 0
 
+	#write to this file
 	with open('algorData.csv', 'wb') as csvfile:
 		file = csv.writer(csvfile, delimiter = ';', quotechar ='"')
+		#training data within this file to be formatted into correct syntax
 		with open('trainingDataSample.csv', 'r') as csvfile:
 			reader = csv.reader(csvfile, delimiter = ';', quotechar ='"')
 			for line in reader:
 				try:
+
+					#clean tweet
 					tweet = line[4].split()
-					words = [w for w in tweet]
-					print words
-					tweet_clean = ' '.join(words)					
+					words = [w for w in tweet] 
+					tweet_clean = ' '.join(words)
+					tweet_clean = re.sub("'","",tweet_clean)
+
+
+					#even amount os pos/neg tweets for naive bayes algorithm 
 					if len(tweet_clean.split()) > 2 and detect(tweet_clean) == 'en':
-						if sentAnalyser(tweet_clean)['compound'] >= int(0.65):
-							posCount = posCount + 1
+						if posCount < dataTotal and sentAnalyser(tweet_clean)['compound'] >= int(0.65):
 							pos = str("('%s','pos')," % str(tweet_clean))
 							file.writerow([pos])
-						elif sentAnalyser(tweet_clean)['compound'] <= int(-0.65):
-							negCount = negCount + 1 
+							posCount = posCount + 1
+						elif negCount < dataTotal and sentAnalyser(tweet_clean)['compound'] <= int(-0.65):
 							neg = str("('%s','neg')," % str(tweet_clean))
 							file.writerow([neg])
-							
+							negCount = negCount + 1 
+						else:
+							pass
 
-					
-						print 'Neg : ', negCount
-						print 'Pos : ', posCount
-				
-					
-					
+					print 'Neg : ', negCount
+					print 'Pos : ', posCount
 
+					#break when all tweets have been gathered 
+					if negCount == dataTotal and posCount == dataTotal:
+						break
 				except:
 					pass
 
@@ -61,4 +69,4 @@ def sentAnalyser(passedTweet):
 	ss = analyzer.polarity_scores(passedTweet)
 	return ss
 
-getTrainData()
+getTrainData(20)
