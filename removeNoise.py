@@ -25,7 +25,7 @@ def removeNoise():
 	y = 0
 	with open('newTestFile.csv', 'wb') as csvfile:			
 		file = csv.writer(csvfile, delimiter = ';', quotechar = '"')
-		with open('data/noMansSky.csv', 'r') as csvfile:
+		with open('data/skyrim.csv', 'r') as csvfile:
 			reader = csv.reader(csvfile, delimiter = ';', quotechar = '"')
 			for line in reader:
 

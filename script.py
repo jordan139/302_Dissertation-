@@ -20,7 +20,7 @@ nueComp = []
 #remove all noise from passed files in term sof punct, stop words and links
 def removeNoise():
 	x = 0
-	with open('newTestFile.csv', 'r') as csvfile:
+	with open('testFile.csv', 'r') as csvfile:
 		reader = csv.reader(csvfile, delimiter = ';', quotechar = '"')
 		for line in reader:
 			x = x + 1 
@@ -44,9 +44,9 @@ def removeNoise():
 
 			#if sentAnalyser(tweet_clean)['compound'] == int(0.0):
 			#	print tweet_clean
+			print x,'/1973'
 			
-			if sentAnalyser(tweet_clean)['compound'] != int (0.0):
-				print(tweet_clean, sentAnalyser(tweet_clean)['compound'] ) 
+			sentAnalyser(tweet_clean)
 
 					
 					
@@ -102,4 +102,4 @@ for v in count:
 	freq[int((v+1)*10)] += 1
 
 for i,v in enumerate(freq):
-	print '#'*v+'  '+str(i/10.0-1)
+	print '|'*v+'  '+str(i/10.0-1)
