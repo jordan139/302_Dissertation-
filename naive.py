@@ -28,18 +28,12 @@ def analysis():
 	classObject = open('algorithm.pickle', 'rb')
 	classifier = pickle.load(classObject)
 	
-	print(classifier.classify('wow'),':POS')
-	print(classifier.classify('This looks so shit '),':NEG')
-	print(classifier.classify('i  might get this game'),':POS')
-	print(classifier.classify('this does not look good at all'),':NEG')
-	print(classifier.classify('hmm i dont like the look of the graphics'),':NEG')
-	print(classifier.classify('iThis could be better'),':NEG')
-	print(classifier.classify('yay!! im so looking forward to this'),':POS')
-	print(classifier.classify('im not getting this'),':NEG')
+	
+	print(classifier.accuracy(test))
 	
 
 
-train()
+analysis()
 
 
 
