@@ -6,7 +6,7 @@ from nltk import word_tokenize
 from nltk.corpus import opinion_lexicon
 from nltk.tokenize import treebank
 from nltk import tokenize
-from langdetect import detect
+from langdetect impimport ort detect
 
 #unicode
 import sys
