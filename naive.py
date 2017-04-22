@@ -1,11 +1,16 @@
+import nltk
 from nltk import NaiveBayesClassifier
 from nltk.tokenize import word_tokenize
 from itertools import chain
 from textblob.classifiers import NaiveBayesClassifier
 from text import training_data
+from improveAlgor import new_training_set
 from textblob import TextBlob
+from nltk.corpus import movie_reviews
+import random 
 import sys
 import pickle 
+
 
 def train():
 
@@ -13,6 +18,11 @@ def train():
 	f = open('algorithm.pickle', 'wb')
 	pickle.dump(classifer, f)
 	f.close()
+
+def updateNaiveBayes():
+	cl = NaiveBayesClassifier(new_training_set)
+	print(cl.accuracy(testing_set))
+
 
 
 
@@ -31,10 +41,7 @@ def analysis():
 	
 	print(classifier.accuracy(test))
 	
-
-
-analysis()
-
+updateNaiveBayes()
 
 
 
